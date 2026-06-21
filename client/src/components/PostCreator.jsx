@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { useAuth, API_BASE, UPLOADS_BASE } from '../context/AuthContext';
-import { Image, Smile, Send, X, Loader } from 'lucide-react';
+import { Image, Send, X, Loader } from 'lucide-react';
 
 const PostCreator = ({ onPostCreated }) => {
   const { token, user } = useAuth();

@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useAuth, API_BASE } from '../context/AuthContext';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback } from 'react';
+import { API_BASE } from '../context/AuthContext';
 import PostCard from '../components/PostCard';
 import { RefreshCw, Compass } from 'lucide-react';
 
 const Explore = ({ setCurrentTab, setProfileUser }) => {
-  const { token } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchExplore = async (showRefreshing = false) => {
+  const fetchExplore = useCallback(async (showRefreshing = false) => {
     if (showRefreshing) setRefreshing(true);
     try {
       const res = await fetch(`${API_BASE}/posts/explore`);
@@ -27,11 +27,11 @@ const Explore = ({ setCurrentTab, setProfileUser }) => {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchExplore();
-  }, []);
+  }, [fetchExplore]);
 
   const handlePostDeleted = (postId) => {
     setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));

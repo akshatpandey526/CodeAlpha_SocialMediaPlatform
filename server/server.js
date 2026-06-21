@@ -30,7 +30,7 @@ app.use('/api/posts', require('./routes/posts'));
 
 // Default root route
 app.get('/', (req, res) => {
-  res.json({ message: 'VibeSpace API is running...' });
+  res.json({ message: 'Vibe-CodeAlpha API is running...' });
 });
 
 // Error handling middleware

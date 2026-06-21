@@ -1,7 +1,7 @@
 {
-  "name": "vibespace-server",
+  "name": "vibe-codealpha-server",
   "version": "1.0.0",
-  "description": "VibeSpace Backend Server",
+  "description": "Vibe-CodeAlpha Backend Server",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

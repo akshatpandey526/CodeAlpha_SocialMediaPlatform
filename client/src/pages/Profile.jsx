@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth, API_BASE, UPLOADS_BASE } from '../context/AuthContext';
 import PostCard from '../components/PostCard';
 import { Camera, Edit3, X, RefreshCw, UserCheck, UserPlus, Grid, List } from 'lucide-react';
@@ -23,7 +24,7 @@ const Profile = ({ username, setCurrentTab, setProfileUser }) => {
   // View state: Grid or List
   const [viewMode, setViewMode] = useState('list');
 
-  const fetchProfileAndPosts = async () => {
+  const fetchProfileAndPosts = useCallback(async () => {
     if (!username) return;
     setLoading(true);
     setError('');
@@ -49,11 +50,11 @@ const Profile = ({ username, setCurrentTab, setProfileUser }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [username]);
 
   useEffect(() => {
     fetchProfileAndPosts();
-  }, [username, currentUser?.following]);
+  }, [fetchProfileAndPosts, currentUser?.following]);
 
   const handleFollowToggle = async () => {
     if (!profileData || !token) return;

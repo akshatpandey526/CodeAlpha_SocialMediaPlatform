@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth, API_BASE, UPLOADS_BASE } from '../context/AuthContext';
-import { UserPlus, Check } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 
 const UserSuggestions = ({ setCurrentTab, setProfileUser }) => {
   const { user, token, followUser } = useAuth();
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchSuggestions = async () => {
+  const fetchSuggestions = useCallback(async () => {
     if (!token) return;
     try {
       const res = await fetch(`${API_BASE}/users/suggestions`, {
@@ -24,11 +25,11 @@ const UserSuggestions = ({ setCurrentTab, setProfileUser }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchSuggestions();
-  }, [user?.following, token]);
+  }, [fetchSuggestions, user?.following]);
 
   const handleFollowClick = async (targetUserId, e) => {
     e.stopPropagation();

@@ -64,17 +64,12 @@ router.delete('/:id', protect, async (req, res) => {
 });
 
 // @route   GET /api/posts/feed
-// @desc    Get user feed (posts from followed accounts + self)
+// @desc    Get user feed (all posts from all users)
 // @access  Private
 router.get('/feed', protect, async (req, res) => {
   try {
-    const currentUser = await User.findById(req.user._id);
-    const followingIds = currentUser.following;
-
-    // Timeline includes posts by current user and people they follow
-    const posts = await Post.find({
-      user: { $in: [...followingIds, req.user._id] }
-    })
+    // Timeline includes posts by all users globally
+    const posts = await Post.find()
       .sort({ createdAt: -1 })
       .populate('user', 'username profilePic bio')
       .populate('comments.user', 'username profilePic');

@@ -1,7 +1,7 @@
 {
-  "name": "vibespace-root",
+  "name": "vibe-codealpha-root",
   "version": "1.0.0",
-  "description": "Root configuration to run VibeSpace client and server concurrently",
+  "description": "Root configuration to run Vibe-CodeAlpha client and server concurrently",
   "scripts": {
     "server": "npm run dev --prefix server",
     "client": "npm run dev --prefix client",

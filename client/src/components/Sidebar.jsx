@@ -1,4 +1,3 @@
-import React from 'react';
 import { useAuth, UPLOADS_BASE } from '../context/AuthContext';
 import { Home, Compass, User, LogOut } from 'lucide-react';
 

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth, API_BASE } from '../context/AuthContext';
 import PostCreator from '../components/PostCreator';
 import PostCard from '../components/PostCard';
@@ -11,7 +12,7 @@ const Home = ({ setCurrentTab, setProfileUser }) => {
   const [error, setError] = useState('');
   const [refreshing, setRefreshing] = useState(false);
 
-  const fetchFeed = async (showRefreshing = false) => {
+  const fetchFeed = useCallback(async (showRefreshing = false) => {
     if (!token) return;
     if (showRefreshing) setRefreshing(true);
     try {
@@ -34,11 +35,11 @@ const Home = ({ setCurrentTab, setProfileUser }) => {
       setLoading(false);
       setRefreshing(false);
     }
-  };
+  }, [token]);
 
   useEffect(() => {
     fetchFeed();
-  }, [token]);
+  }, [fetchFeed]);
 
   const handlePostCreated = (newPost) => {
     setPosts((prevPosts) => [newPost, ...prevPosts]);
@@ -91,17 +92,10 @@ const Home = ({ setCurrentTab, setProfileUser }) => {
         </div>
       ) : posts.length === 0 ? (
         <div className="glass-panel" style={{ padding: '40px', textAlign: 'center', color: 'var(--text-secondary)' }}>
-          <h3 style={{ fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)' }}>No Vibes on Feed</h3>
+          <h3 style={{ fontWeight: 700, marginBottom: '8px', color: 'var(--text-primary)' }}>No Vibes Yet</h3>
           <p style={{ fontSize: '0.9rem', maxWidth: '300px', margin: '0 auto 16px auto', lineHeight: '1.5' }}>
-            Follow other vibers or post something to kick off your timeline.
+            Be the first one to share a post and start the vibe!
           </p>
-          <button 
-            onClick={() => setCurrentTab('explore')}
-            className="bg-gradient-btn"
-            style={{ padding: '8px 20px', borderRadius: '20px', fontSize: '0.85rem' }}
-          >
-            Explore Vibes
-          </button>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column' }}>

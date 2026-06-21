@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { Sparkles, Mail, Lock, User, ShieldAlert } from 'lucide-react';
 
@@ -80,7 +80,7 @@ const AuthPage = () => {
             {isLogin ? 'Welcome Back' : 'Create Account'}
           </h2>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '6px' }}>
-            {isLogin ? 'Sign in to see what your friends are up to' : 'Join VibeSpace and share your vibes today'}
+            {isLogin ? 'Sign in to see what your friends are up to' : 'Join Vibe-CodeAlpha and share your vibes today'}
           </p>
         </div>
 

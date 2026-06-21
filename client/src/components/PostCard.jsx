@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth, API_BASE, UPLOADS_BASE } from '../context/AuthContext';
 import { Heart, MessageSquare, Trash2, Send, Clock } from 'lucide-react';
 

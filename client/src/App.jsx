@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
@@ -26,7 +26,7 @@ const MainLayout = () => {
       }}>
         <RefreshCw size={36} className="animate-spin" style={{ animation: 'spin 1s linear infinite', color: 'var(--primary-color)' }} />
         <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 500 }}>
-          Initializing VibeSpace...
+          Initializing Vibe-CodeAlpha...
         </p>
       </div>
     );

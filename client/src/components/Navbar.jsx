@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAuth, UPLOADS_BASE, API_BASE } from '../context/AuthContext';
-import { Search, Sparkles, User as UserIcon, LogOut } from 'lucide-react';
+import { Search, Sparkles, LogOut } from 'lucide-react';
 
 const Navbar = ({ setCurrentTab, setProfileUser }) => {
   const { user, logout } = useAuth();
@@ -85,7 +85,7 @@ const Navbar = ({ setCurrentTab, setProfileUser }) => {
           <Sparkles size={20} color="#fff" />
         </div>
         <span className="text-gradient" style={{ fontWeight: 800, fontSize: '1.4rem', letterSpacing: '0.5px' }}>
-          VibeSpace
+          Vibe-CodeAlpha
         </span>
       </div>
 
