@@ -24,9 +24,9 @@ const Sidebar = ({ currentTab, setCurrentTab, setProfileUser }) => {
   ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div className="sidebar-container" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Navigation panel */}
-      <div className="glass-panel" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div className="glass-panel sidebar-nav" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
         {menuItems.map((item) => {
           const IconComponent = item.icon;
           const isActive = currentTab === item.id;
@@ -34,6 +34,7 @@ const Sidebar = ({ currentTab, setCurrentTab, setProfileUser }) => {
             <div
               key={item.id}
               onClick={() => handleTabClick(item.id)}
+              className="sidebar-nav-item"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -72,6 +73,7 @@ const Sidebar = ({ currentTab, setCurrentTab, setProfileUser }) => {
 
         <div
           onClick={logout}
+          className="sidebar-nav-item logout-item"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -93,7 +95,7 @@ const Sidebar = ({ currentTab, setCurrentTab, setProfileUser }) => {
 
       {/* Mini Profile card panel */}
       {user && (
-        <div className="glass-panel" style={{ padding: '20px', textAlign: 'center' }}>
+        <div className="glass-panel sidebar-profile-card" style={{ padding: '20px', textAlign: 'center' }}>
           <div 
             onClick={() => handleTabClick('profile')}
             style={{ display: 'inline-block', cursor: 'pointer', position: 'relative', marginBottom: '12px' }}
