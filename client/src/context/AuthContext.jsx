@@ -2,8 +2,8 @@ import React, { createContext, useState, useEffect, useContext } from 'react';
 
 const AuthContext = createContext();
 
-export const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
-export const UPLOADS_BASE = import.meta.env.VITE_UPLOADS_BASE || 'http://localhost:5000';
+export const API_BASE = import.meta.env.VITE_API_BASE || 'https://codealpha-socialmediaplatform-xakt.onrender.com/api';
+export const UPLOADS_BASE = import.meta.env.VITE_UPLOADS_BASE || 'https://codealpha-socialmediaplatform-xakt.onrender.com';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
