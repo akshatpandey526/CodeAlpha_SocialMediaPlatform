@@ -4,6 +4,7 @@ const Post = require('../models/Post');
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const { uploadToCloudinary } = require('../config/cloudinary');
 
 // @route   POST /api/posts
 // @desc    Create a new post
@@ -12,9 +13,12 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
   try {
     const { text } = req.body;
     let imageUrl = '';
+    let mediaType = 'image';
 
     if (req.file) {
-      imageUrl = `/uploads/${req.file.filename}`;
+      const uploadResult = await uploadToCloudinary(req.file.path);
+      imageUrl = uploadResult.url;
+      mediaType = uploadResult.resource_type;
     }
 
     if (!text && !imageUrl) {
@@ -24,7 +28,8 @@ router.post('/', protect, upload.single('image'), async (req, res) => {
     const newPost = await Post.create({
       user: req.user._id,
       text: text || '',
-      image: imageUrl
+      image: imageUrl,
+      mediaType: mediaType
     });
 
     const populatedPost = await Post.findById(newPost._id).populate(

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth, API_BASE, UPLOADS_BASE } from '../context/AuthContext';
+import { useAuth, API_BASE, getMediaUrl } from '../context/AuthContext';
 import { UserPlus } from 'lucide-react';
 
 const UserSuggestions = ({ setCurrentTab, setProfileUser }) => {
@@ -87,7 +87,7 @@ const UserSuggestions = ({ setCurrentTab, setProfileUser }) => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
               {item.profilePic ? (
                 <img
-                  src={`${UPLOADS_BASE}${item.profilePic}`}
+                  src={getMediaUrl(item.profilePic)}
                   alt={item.username}
                   style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover' }}
                 />

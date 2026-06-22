@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useAuth, UPLOADS_BASE, API_BASE } from '../context/AuthContext';
+import { useAuth, getMediaUrl, API_BASE } from '../context/AuthContext';
 import { Search, Sparkles, LogOut } from 'lucide-react';
 
 const Navbar = ({ setCurrentTab, setProfileUser }) => {
@@ -152,7 +152,7 @@ const Navbar = ({ setCurrentTab, setProfileUser }) => {
               >
                 {result.profilePic ? (
                   <img
-                    src={`${UPLOADS_BASE}${result.profilePic}`}
+                    src={getMediaUrl(result.profilePic)}
                     alt={result.username}
                     style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }}
                   />
@@ -193,7 +193,7 @@ const Navbar = ({ setCurrentTab, setProfileUser }) => {
           >
             {user.profilePic ? (
               <img
-                src={`${UPLOADS_BASE}${user.profilePic}`}
+                src={getMediaUrl(user.profilePic)}
                 alt={user.username}
                 style={{
                   width: '36px',

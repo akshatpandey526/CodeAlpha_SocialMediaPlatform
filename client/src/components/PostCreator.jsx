@@ -1,43 +1,53 @@
 import { useState, useRef } from 'react';
-import { useAuth, API_BASE, UPLOADS_BASE } from '../context/AuthContext';
+import { useAuth, API_BASE, getMediaUrl } from '../context/AuthContext';
 import { Image, Send, X, Loader } from 'lucide-react';
 
 const PostCreator = ({ onPostCreated }) => {
   const { token, user } = useAuth();
   const [text, setText] = useState('');
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState('');
+  const [mediaFile, setMediaFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState('');
+  const [mediaType, setMediaType] = useState(''); // 'image' or 'video'
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const fileInputRef = useRef(null);
 
-  const handleImageChange = (e) => {
+  const handleMediaChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
-        setError('Image file size cannot exceed 5MB');
+      const isVideo = file.type.startsWith('video/');
+      const maxSize = isVideo ? 100 * 1024 * 1024 : 10 * 1024 * 1024; // 100MB for video, 10MB for image
+      const sizeLimitText = isVideo ? '100MB' : '10MB';
+
+      if (file.size > maxSize) {
+        setError(`File size cannot exceed ${sizeLimitText}`);
         return;
       }
       setError('');
-      setImageFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+      setMediaFile(file);
+      setMediaType(isVideo ? 'video' : 'image');
+      
+      if (mediaPreview) {
+        URL.revokeObjectURL(mediaPreview);
+      }
+      setMediaPreview(URL.createObjectURL(file));
     }
   };
 
-  const clearImage = () => {
-    setImageFile(null);
-    setImagePreview('');
+  const clearMedia = () => {
+    setMediaFile(null);
+    if (mediaPreview) {
+      URL.revokeObjectURL(mediaPreview);
+    }
+    setMediaPreview('');
+    setMediaType('');
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!text.trim() && !imageFile) {
-      setError('Please add some text or an image to share your vibe');
+    if (!text.trim() && !mediaFile) {
+      setError('Please add some text or media to share your vibe');
       return;
     }
 
@@ -47,8 +57,8 @@ const PostCreator = ({ onPostCreated }) => {
     try {
       const formData = new FormData();
       formData.append('text', text);
-      if (imageFile) {
-        formData.append('image', imageFile);
+      if (mediaFile) {
+        formData.append('image', mediaFile);
       }
 
       const res = await fetch(`${API_BASE}/posts`, {
@@ -67,7 +77,7 @@ const PostCreator = ({ onPostCreated }) => {
 
       // Success
       setText('');
-      clearImage();
+      clearMedia();
       if (onPostCreated) {
         onPostCreated(data);
       }
@@ -93,7 +103,7 @@ const PostCreator = ({ onPostCreated }) => {
         <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
           {user?.profilePic ? (
             <img
-              src={`${UPLOADS_BASE}${user.profilePic}`}
+              src={getMediaUrl(user.profilePic)}
               alt={user.username}
               style={{ width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover' }}
             />
@@ -133,17 +143,25 @@ const PostCreator = ({ onPostCreated }) => {
               }}
             />
             
-            {/* Image Preview Container */}
-            {imagePreview && (
-              <div style={{ position: 'relative', marginTop: '12px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', maxHeight: '350px' }}>
-                <img
-                  src={imagePreview}
-                  alt="Post preview"
-                  style={{ width: '100%', maxHeight: '350px', objectFit: 'cover', display: 'block' }}
-                />
+            {/* Media Preview Container */}
+            {mediaPreview && (
+              <div style={{ position: 'relative', marginTop: '12px', borderRadius: '12px', overflow: 'hidden', border: '1px solid var(--glass-border)', maxHeight: '350px', backgroundColor: '#000' }}>
+                {mediaType === 'video' ? (
+                  <video
+                    src={mediaPreview}
+                    controls
+                    style={{ width: '100%', maxHeight: '350px', objectFit: 'contain', display: 'block' }}
+                  />
+                ) : (
+                  <img
+                    src={mediaPreview}
+                    alt="Post preview"
+                    style={{ width: '100%', maxHeight: '350px', objectFit: 'cover', display: 'block' }}
+                  />
+                )}
                 <button
                   type="button"
-                  onClick={clearImage}
+                  onClick={clearMedia}
                   style={{
                     position: 'absolute',
                     top: '8px',
@@ -158,7 +176,8 @@ const PostCreator = ({ onPostCreated }) => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
-                    transition: 'var(--transition-smooth)'
+                    transition: 'var(--transition-smooth)',
+                    zIndex: 10
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.8)'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.6)'}
@@ -202,13 +221,13 @@ const PostCreator = ({ onPostCreated }) => {
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
             >
               <Image size={18} />
-              <span>Photo</span>
+              <span>Media</span>
             </button>
             <input
               type="file"
               ref={fileInputRef}
-              onChange={handleImageChange}
-              accept="image/*"
+              onChange={handleMediaChange}
+              accept="image/*,video/*"
               style={{ display: 'none' }}
             />
 

@@ -1,4 +1,4 @@
-import { useAuth, UPLOADS_BASE } from '../context/AuthContext';
+import { useAuth, getMediaUrl } from '../context/AuthContext';
 import { Home, Compass, User, LogOut } from 'lucide-react';
 
 const Sidebar = ({ currentTab, setCurrentTab, setProfileUser }) => {
@@ -24,9 +24,9 @@ const Sidebar = ({ currentTab, setCurrentTab, setProfileUser }) => {
   ];
 
   return (
-    <div className="sidebar-container" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <div className="sidebar-container">
       {/* Navigation panel */}
-      <div className="glass-panel sidebar-nav" style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+      <div className="glass-panel sidebar-nav">
         {menuItems.map((item) => {
           const IconComponent = item.icon;
           const isActive = currentTab === item.id;
@@ -102,7 +102,7 @@ const Sidebar = ({ currentTab, setCurrentTab, setProfileUser }) => {
           >
             {user.profilePic ? (
               <img
-                src={`${UPLOADS_BASE}${user.profilePic}`}
+                src={getMediaUrl(user.profilePic)}
                 alt={user.username}
                 style={{
                   width: '64px',

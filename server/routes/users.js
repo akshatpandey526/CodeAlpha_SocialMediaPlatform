@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 const upload = require('../middleware/upload');
+const { uploadToCloudinary } = require('../config/cloudinary');
 
 // @route   GET /api/users/search
 // @desc    Search users by username
@@ -91,10 +92,12 @@ router.put(
       // Check uploaded files
       if (req.files) {
         if (req.files.profilePic && req.files.profilePic[0]) {
-          updateData.profilePic = `/uploads/${req.files.profilePic[0].filename}`;
+          const uploadResult = await uploadToCloudinary(req.files.profilePic[0].path);
+          updateData.profilePic = uploadResult.url;
         }
         if (req.files.coverPic && req.files.coverPic[0]) {
-          updateData.coverPic = `/uploads/${req.files.coverPic[0].filename}`;
+          const uploadResult = await uploadToCloudinary(req.files.coverPic[0].path);
+          updateData.coverPic = uploadResult.url;
         }
       }
 

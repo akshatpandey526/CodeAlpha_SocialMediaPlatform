@@ -42,19 +42,9 @@ const MainLayout = () => {
       <Navbar setCurrentTab={setCurrentTab} setProfileUser={setProfileUser} />
 
       {/* Main Grid Body Container */}
-      <div className="main-container" style={{
-        flex: 1,
-        width: '100%',
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '0 24px 40px 24px',
-        display: 'grid',
-        gridTemplateColumns: '240px 1fr 280px',
-        gap: '24px',
-        alignItems: 'flex-start'
-      }}>
+      <div className="main-container">
         {/* Left Column Sidebar */}
-        <div style={{ position: 'sticky', top: '90px' }} className="sidebar-col">
+        <div className="sidebar-col">
           <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} setProfileUser={setProfileUser} />
         </div>
 
@@ -76,7 +66,7 @@ const MainLayout = () => {
         </main>
 
         {/* Right Column Suggestions */}
-        <div style={{ position: 'sticky', top: '90px' }} className="suggestions-col">
+        <div className="suggestions-col">
           <UserSuggestions setCurrentTab={setCurrentTab} setProfileUser={setProfileUser} />
         </div>
       </div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth, API_BASE, UPLOADS_BASE } from '../context/AuthContext';
+import { useAuth, API_BASE, getMediaUrl } from '../context/AuthContext';
 import { Heart, MessageSquare, Trash2, Send, Clock } from 'lucide-react';
 
 const PostCard = ({ post, onPostDeleted, setCurrentTab, setProfileUser }) => {
@@ -121,7 +121,7 @@ const PostCard = ({ post, onPostDeleted, setCurrentTab, setProfileUser }) => {
         >
           {post.user.profilePic ? (
             <img
-              src={`${UPLOADS_BASE}${post.user.profilePic}`}
+              src={getMediaUrl(post.user.profilePic)}
               alt={post.user.username}
               style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }}
             />
@@ -198,11 +198,19 @@ const PostCard = ({ post, onPostDeleted, setCurrentTab, setProfileUser }) => {
               cursor: 'pointer'
             }}
           >
-            <img
-              src={`${UPLOADS_BASE}${post.image}`}
-              alt="Vibe Media"
-              style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', display: 'block' }}
-            />
+            {post.mediaType === 'video' ? (
+              <video
+                src={getMediaUrl(post.image)}
+                controls
+                style={{ width: '100%', maxHeight: '400px', objectFit: 'contain', display: 'block' }}
+              />
+            ) : (
+              <img
+                src={getMediaUrl(post.image)}
+                alt="Vibe Media"
+                style={{ width: '100%', maxHeight: '400px', objectFit: 'cover', display: 'block' }}
+              />
+            )}
             {likeAnimating && (
               <div style={{
                 position: 'absolute',
@@ -286,7 +294,7 @@ const PostCard = ({ post, onPostDeleted, setCurrentTab, setProfileUser }) => {
                 <div key={comment._id} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
                   {comment.profilePic ? (
                     <img
-                      src={`${UPLOADS_BASE}${comment.profilePic}`}
+                      src={getMediaUrl(comment.profilePic)}
                       alt={comment.username}
                       style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', marginTop: '2px' }}
                     />
@@ -340,7 +348,7 @@ const PostCard = ({ post, onPostDeleted, setCurrentTab, setProfileUser }) => {
             <form onSubmit={handleCommentSubmit} style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               {user.profilePic ? (
                 <img
-                  src={`${UPLOADS_BASE}${user.profilePic}`}
+                  src={getMediaUrl(user.profilePic)}
                   alt={user.username}
                   style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover' }}
                 />

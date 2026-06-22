@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useCallback } from 'react';
-import { useAuth, API_BASE, UPLOADS_BASE } from '../context/AuthContext';
+import { useAuth, API_BASE, getMediaUrl } from '../context/AuthContext';
 import PostCard from '../components/PostCard';
 import { Camera, Edit3, X, RefreshCw, UserCheck, UserPlus, Grid, List } from 'lucide-react';
 
@@ -162,7 +162,7 @@ const Profile = ({ username, setCurrentTab, setProfileUser }) => {
       <div className="glass-panel" style={{ padding: 0, overflow: 'hidden', marginBottom: '24px' }}>
         {/* Cover banner image */}
         {profileData.coverPic ? (
-          <div style={{ height: '180px', width: '100%', background: `url(${UPLOADS_BASE}${profileData.coverPic}) center/cover no-repeat` }}></div>
+          <div style={{ height: '180px', width: '100%', background: `url(${getMediaUrl(profileData.coverPic)}) center/cover no-repeat` }}></div>
         ) : (
           <div style={{ height: '180px', width: '100%', background: 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))', opacity: 0.85 }}></div>
         )}
@@ -176,7 +176,7 @@ const Profile = ({ username, setCurrentTab, setProfileUser }) => {
           }}>
             {profileData.profilePic ? (
               <img
-                src={`${UPLOADS_BASE}${profileData.profilePic}`}
+                src={getMediaUrl(profileData.profilePic)}
                 alt={profileData.username}
                 style={{
                   width: '100px',
@@ -372,11 +372,19 @@ const Profile = ({ username, setCurrentTab, setProfileUser }) => {
               }}
             >
               {post.image ? (
-                <img
-                  src={`${UPLOADS_BASE}${post.image}`}
-                  alt="Post Thumbnail"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+                post.mediaType === 'video' ? (
+                  <video
+                    src={getMediaUrl(post.image)}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    muted
+                  />
+                ) : (
+                  <img
+                    src={getMediaUrl(post.image)}
+                    alt="Post Thumbnail"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                )
               ) : (
                 <div style={{
                   padding: '16px',
@@ -468,7 +476,7 @@ const Profile = ({ username, setCurrentTab, setProfileUser }) => {
                   background: coverPreview 
                     ? `url(${coverPreview}) center/cover no-repeat` 
                     : profileData.coverPic 
-                      ? `url(${UPLOADS_BASE}${profileData.coverPic}) center/cover no-repeat`
+                      ? `url(${getMediaUrl(profileData.coverPic)}) center/cover no-repeat`
                       : 'linear-gradient(135deg, var(--primary-color), var(--secondary-color))',
                   border: '1px solid var(--glass-border)',
                   display: 'flex',
@@ -511,7 +519,7 @@ const Profile = ({ username, setCurrentTab, setProfileUser }) => {
                   {profilePreview ? (
                     <img src={profilePreview} alt="Avatar Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : profileData.profilePic ? (
-                    <img src={`${UPLOADS_BASE}${profileData.profilePic}`} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src={getMediaUrl(profileData.profilePic)} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   ) : (
                     <div style={{ width: '100%', height: '100%', backgroundColor: 'var(--primary-color)', display: 'flex', alignItems: 'center', justify: 'center', fontWeight: 'bold', color: '#fff', fontSize: '1.2rem' }}>
                       {getInitials(profileData.username)}

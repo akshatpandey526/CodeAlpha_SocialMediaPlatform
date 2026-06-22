@@ -6,6 +6,14 @@ const AuthContext = createContext();
 export const API_BASE = import.meta.env.VITE_API_BASE || 'https://codealpha-socialmediaplatform-xakt.onrender.com/api';
 export const UPLOADS_BASE = import.meta.env.VITE_UPLOADS_BASE || 'https://codealpha-socialmediaplatform-xakt.onrender.com';
 
+export const getMediaUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
+    return path;
+  }
+  return `${UPLOADS_BASE}${path}`;
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token') || '');
